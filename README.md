@@ -1,5 +1,3 @@
-#GO
+# GO
 
-ˋˋˋ
-docker run guilhermefiola/codeeducation:latest
-ˋˋˋ
+	docker run guilhermefiola/codeeducation:latest 
