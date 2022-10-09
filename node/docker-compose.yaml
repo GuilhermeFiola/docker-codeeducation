@@ -1,0 +1,39 @@
+version: '3'
+
+services:
+  node:
+    build: 
+      context: ./app
+      dockerfile: Dockerfile
+    image: guilhermefiola/node:prod
+    container_name: node
+    entrypoint: dockerize -wait tcp://db:3306 -timeout 40s node /usr/src/app/index.js
+    networks:
+      - desafio-node
+  
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    image: guilhermefiola/nginx:prod
+    container_name: nginx
+    networks:
+      - desafio-node
+    ports:
+      - "8080:80"
+
+  db:
+    image: mysql:5.7
+    command: --innodb-use-native-aio=0
+    container_name: db
+    restart: always
+    tty: true
+    environment:
+      - MYSQL_DATABASE=nodedb
+      - MYSQL_ROOT_PASSWORD=root
+    networks:
+      - desafio-node
+
+networks:
+  desafio-node:
+    driver: bridge
